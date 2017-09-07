@@ -1,0 +1,49 @@
+{
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "region": "eu-central-1",
+            "source_ami_filter": {
+                "filters": {
+                  "virtualization-type": "hvm",
+                  "name": "Windows_Server-2016-English-Full-Base-*",
+                  "root-device-type": "ebs"
+                },
+                "owners": ["801119661308"],
+                "most_recent": true
+            },
+            "instance_type": "t2.micro",
+            "ami_name": "windows-base-{{timestamp}}",
+            "user_data_file":"scripts/ec2-userdata.ps1",
+            "communicator": "winrm",
+            "winrm_username": "packer",
+            "winrm_password": "Cheopsfr44@",
+            "winrm_use_ssl": true,
+            "winrm_insecure": true,
+            "access_key": "MyAWSKey",
+            "secret_key": "MyAWSSecretKey"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "powershell",
+            "scripts": [
+                "scripts/configure_PSGallery.ps1",
+                "scripts/install_ps_modules.ps1",
+                "scripts/DSC_choco_applications.ps1",
+                "scripts/DSC_install_microsoft_updates.ps1"
+            ]
+        },
+        {
+            "type": "windows-restart",
+            "restart_timeout": "20m" 
+        },
+        {
+            "type": "powershell",
+            "inline": [
+                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule",
+                "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\SysprepInstance.ps1 -NoShutdown"
+            ]
+        }
+    ]
+}
