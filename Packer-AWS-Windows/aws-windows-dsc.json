@@ -17,7 +17,7 @@
             "user_data_file":"scripts/ec2-userdata.ps1",
             "communicator": "winrm",
             "winrm_username": "packer",
-            "winrm_password": "Cheopsfr44@",
+            "winrm_password": "MyAwesomePassword!@#$",
             "winrm_use_ssl": true,
             "winrm_insecure": true,
             "access_key": "MyAWSKey",
